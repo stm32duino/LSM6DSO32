@@ -14,13 +14,13 @@
 #include <LSM6DSO32Sensor.h>
 
 #ifdef ARDUINO_SAM_DUE
-#define DEV_I2C Wire1
+  #define DEV_I2C Wire1
 #elif defined(ARDUINO_ARCH_STM32)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #elif defined(ARDUINO_ARCH_AVR)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #else
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #endif
 #define SerialPort Serial
 
@@ -36,7 +36,8 @@ char report[256];
 void INT1Event_cb();
 void sendOrientation();
 
-void setup() {
+void setup()
+{
   // Led.
   pinMode(LED_BUILTIN, OUTPUT);
   // Initialize serial for output.
@@ -44,7 +45,7 @@ void setup() {
 
   // Initialize I2C bus.
   DEV_I2C.begin();
-  
+
   //Int1 pin input
   pinMode(IMU_INT_1, INPUT);
 
@@ -53,26 +54,24 @@ void setup() {
   accGyr.Enable_6D_Orientation(LSM6DSO32_INT1_PIN);
 }
 
-void loop() {
+void loop()
+{
 
   int int_val = digitalRead(IMU_INT_1);
-  if(int_val && !mems_event)
-  {
+  if (int_val && !mems_event) {
     mems_event = 1;
   }
 
-  if (mems_event)
-  {
-    mems_event=0;
+  if (mems_event) {
+    mems_event = 0;
     LSM6DSO32_Event_Status_t status;
     accGyr.Get_X_Event_Status(&status);
-    if (status.D6DOrientationStatus)
-    {
+    if (status.D6DOrientationStatus) {
       sendOrientation();
       // Led blinking.
       digitalWrite(LED_BUILTIN, HIGH);
       delay(100);
-      digitalWrite(LED_BUILTIN, LOW);  
+      digitalWrite(LED_BUILTIN, LOW);
     }
   }
 }
@@ -93,70 +92,63 @@ void sendOrientation()
   accGyr.Get_6D_Orientation_ZL(&zl);
   accGyr.Get_6D_Orientation_ZH(&zh);
 
-  if ( xl == 0 && yl == 0 && zl == 0 && xh == 0 && yh == 1 && zh == 0 )
-  {
-    sprintf( report, "\r\n  ________________  " \
-                      "\r\n |                | " \
-                      "\r\n |  *             | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |________________| \r\n" );
+  if (xl == 0 && yl == 0 && zl == 0 && xh == 0 && yh == 1 && zh == 0) {
+    sprintf(report, "\r\n  ________________  " \
+            "\r\n |                | " \
+            "\r\n |  *             | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |________________| \r\n");
   }
 
-  else if ( xl == 1 && yl == 0 && zl == 0 && xh == 0 && yh == 0 && zh == 0 )
-  {
-    sprintf( report, "\r\n  ________________  " \
-                      "\r\n |                | " \
-                      "\r\n |             *  | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |________________| \r\n" );
+  else if (xl == 1 && yl == 0 && zl == 0 && xh == 0 && yh == 0 && zh == 0) {
+    sprintf(report, "\r\n  ________________  " \
+            "\r\n |                | " \
+            "\r\n |             *  | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |________________| \r\n");
   }
 
-  else if ( xl == 0 && yl == 0 && zl == 0 && xh == 1 && yh == 0 && zh == 0 )
-  {
-    sprintf( report, "\r\n  ________________  " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |  *             | " \
-                      "\r\n |________________| \r\n" );
+  else if (xl == 0 && yl == 0 && zl == 0 && xh == 1 && yh == 0 && zh == 0) {
+    sprintf(report, "\r\n  ________________  " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |  *             | " \
+            "\r\n |________________| \r\n");
   }
 
-  else if ( xl == 0 && yl == 1 && zl == 0 && xh == 0 && yh == 0 && zh == 0 )
-  {
-    sprintf( report, "\r\n  ________________  " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |                | " \
-                      "\r\n |             *  | " \
-                      "\r\n |________________| \r\n" );
+  else if (xl == 0 && yl == 1 && zl == 0 && xh == 0 && yh == 0 && zh == 0) {
+    sprintf(report, "\r\n  ________________  " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |                | " \
+            "\r\n |             *  | " \
+            "\r\n |________________| \r\n");
   }
 
-  else if ( xl == 0 && yl == 0 && zl == 0 && xh == 0 && yh == 0 && zh == 1 )
-  {
-    sprintf( report, "\r\n  __*_____________  " \
-                      "\r\n |________________| \r\n" );
+  else if (xl == 0 && yl == 0 && zl == 0 && xh == 0 && yh == 0 && zh == 1) {
+    sprintf(report, "\r\n  __*_____________  " \
+            "\r\n |________________| \r\n");
   }
 
-  else if ( xl == 0 && yl == 0 && zl == 1 && xh == 0 && yh == 0 && zh == 0 )
-  {
-    sprintf( report, "\r\n  ________________  " \
-                      "\r\n |________________| " \
-                      "\r\n    *               \r\n" );
+  else if (xl == 0 && yl == 0 && zl == 1 && xh == 0 && yh == 0 && zh == 0) {
+    sprintf(report, "\r\n  ________________  " \
+            "\r\n |________________| " \
+            "\r\n    *               \r\n");
   }
 
-  else
-  {
-    sprintf( report, "None of the 6D orientation axes is set in LSM6DSO - accelerometer.\r\n" );
+  else {
+    sprintf(report, "None of the 6D orientation axes is set in LSM6DSO - accelerometer.\r\n");
   }
 
   SerialPort.print(report);

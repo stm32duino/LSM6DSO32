@@ -14,13 +14,13 @@
 #include <LSM6DSO32Sensor.h>
 
 #ifdef ARDUINO_SAM_DUE
-#define DEV_I2C Wire1
+  #define DEV_I2C Wire1
 #elif defined(ARDUINO_ARCH_STM32)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #elif defined(ARDUINO_ARCH_AVR)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #else
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #endif
 #define SerialPort Serial
 
@@ -36,7 +36,8 @@ char report[256];
 uint16_t step_count = 0;
 uint32_t previous_tick;
 
-void setup() {
+void setup()
+{
   // Led.
   pinMode(LED_BUILTIN, OUTPUT);
   // Initialize serial for output.
@@ -44,7 +45,7 @@ void setup() {
 
   // Initialize I2C bus.
   DEV_I2C.begin();
-  
+
   //Int1 pin input
   pinMode(IMU_INT_1, INPUT);
 
@@ -55,21 +56,19 @@ void setup() {
   previous_tick = millis();
 }
 
-void loop() {
+void loop()
+{
 
   int int_val = digitalRead(IMU_INT_1);
-  if(int_val && !mems_event)
-  {
+  if (int_val && !mems_event) {
     mems_event = 1;
   }
 
-  if (mems_event)
-  {
-    mems_event=0;
+  if (mems_event) {
+    mems_event = 0;
     LSM6DSO32_Event_Status_t status;
     accGyr.Get_X_Event_Status(&status);
-    if (status.StepStatus)
-    {
+    if (status.StepStatus) {
       // New step detected, so print the step counter
       accGyr.Get_Step_Count(&step_count);
       snprintf(report, sizeof(report), "Step counter: %d", step_count);
@@ -83,12 +82,11 @@ void loop() {
   }
   // Print the step counter in any case every 3000 ms
   uint32_t current_tick = millis();
-  if((current_tick - previous_tick) >= 3000)
-  {
+  if ((current_tick - previous_tick) >= 3000) {
     accGyr.Get_Step_Count(&step_count);
     snprintf(report, sizeof(report), "Step counter: %d", step_count);
     SerialPort.println(report);
     previous_tick = millis();
   }
-  
+
 }

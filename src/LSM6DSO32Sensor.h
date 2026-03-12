@@ -24,9 +24,9 @@
 /* Defines -------------------------------------------------------------------*/
 /* For compatibility with ESP32 platforms */
 #ifdef ESP32
-#ifndef MSBFIRST
-#define MSBFIRST SPI_MSBFIRST
-#endif
+  #ifndef MSBFIRST
+    #define MSBFIRST SPI_MSBFIRST
+  #endif
 #endif
 
 #define LSM6DSO32_ACC_SENSITIVITY_FS_4G   0.122f
@@ -43,33 +43,28 @@
 
 /* Typedefs ------------------------------------------------------------------*/
 
-typedef enum
-{
+typedef enum {
   LSM6DSO32_OK = 0,
   LSM6DSO32_ERROR = -1
 } LSM6DSO32StatusTypeDef;
 
-typedef enum
-{
+typedef enum {
   LSM6DSO32_INT1_PIN,
   LSM6DSO32_INT2_PIN,
 } LSM6DSO32_SensorIntPin_t;
 
-typedef enum
-{
+typedef enum {
   LSM6DSO32_ACC_HIGH_PERFORMANCE_MODE,
   LSM6DSO32_ACC_LOW_POWER_NORMAL_MODE,
   LSM6DSO32_ACC_ULTRA_LOW_POWER_MODE
 } LSM6DSO32_ACC_Operating_Mode_t;
 
-typedef enum
-{
+typedef enum {
   LSM6DSO32_GYRO_HIGH_PERFORMANCE_MODE,
   LSM6DSO32_GYRO_LOW_POWER_NORMAL_MODE
 } LSM6DSO32_GYRO_Operating_Mode_t;
 
-typedef struct
-{
+typedef struct {
   unsigned int FreeFallStatus : 1;
   unsigned int TapStatus : 1;
   unsigned int DoubleTapStatus : 1;
@@ -81,16 +76,15 @@ typedef struct
 } LSM6DSO32_Event_Status_t;
 
 /* Class Declaration ---------------------------------------------------------*/
-   
+
 /**
  * Abstract class of an LSM6DSO32 Inertial Measurement Unit (IMU) 3 axes
  * sensor.
  */
-class LSM6DSO32Sensor
-{
+class LSM6DSO32Sensor {
   public:
-    LSM6DSO32Sensor(TwoWire *i2c, uint8_t address=LSM6DSO32_I2C_ADD_H);
-    LSM6DSO32Sensor(SPIClass *spi, int cs_pin, uint32_t spi_speed=2000000);
+    LSM6DSO32Sensor(TwoWire *i2c, uint8_t address = LSM6DSO32_I2C_ADD_H);
+    LSM6DSO32Sensor(SPIClass *spi, int cs_pin, uint32_t spi_speed = 2000000);
     LSM6DSO32StatusTypeDef begin();
     LSM6DSO32StatusTypeDef end();
     LSM6DSO32StatusTypeDef ReadID(uint8_t *Id);
@@ -105,7 +99,7 @@ class LSM6DSO32Sensor
     LSM6DSO32StatusTypeDef Set_X_FS(int32_t FullScale);
     LSM6DSO32StatusTypeDef Get_X_AxesRaw(int16_t *Value);
     LSM6DSO32StatusTypeDef Get_X_Axes(int32_t *Acceleration);
-    
+
     LSM6DSO32StatusTypeDef Enable_G();
     LSM6DSO32StatusTypeDef Disable_G();
     LSM6DSO32StatusTypeDef Get_G_Sensitivity(float *Sensitivity);
@@ -117,35 +111,35 @@ class LSM6DSO32Sensor
     LSM6DSO32StatusTypeDef Set_G_FS(int32_t FullScale);
     LSM6DSO32StatusTypeDef Get_G_AxesRaw(int16_t *Value);
     LSM6DSO32StatusTypeDef Get_G_Axes(int32_t *AngularRate);
-    
+
     LSM6DSO32StatusTypeDef Read_Reg(uint8_t reg, uint8_t *Data);
     LSM6DSO32StatusTypeDef Write_Reg(uint8_t reg, uint8_t Data);
     LSM6DSO32StatusTypeDef Set_Interrupt_Latch(uint8_t Status);
     LSM6DSO32StatusTypeDef Set_Interrupt_Polarity(uint8_t Status);
     LSM6DSO32StatusTypeDef Set_Interrupt_PinMode_OpenDrain(uint8_t Status);
-    
+
     LSM6DSO32StatusTypeDef Enable_Free_Fall_Detection(LSM6DSO32_SensorIntPin_t IntPin);
     LSM6DSO32StatusTypeDef Disable_Free_Fall_Detection();
     LSM6DSO32StatusTypeDef Set_Free_Fall_Threshold(uint8_t Threshold);
     LSM6DSO32StatusTypeDef Get_Free_Fall_Threshold(uint8_t *Threshold);
     LSM6DSO32StatusTypeDef Set_Free_Fall_Duration(uint8_t Duration);
     LSM6DSO32StatusTypeDef Get_Free_Fall_Duration(uint8_t *Duration);
-    
+
     LSM6DSO32StatusTypeDef Enable_Pedometer();
     LSM6DSO32StatusTypeDef Disable_Pedometer();
     LSM6DSO32StatusTypeDef Get_Step_Count(uint16_t *StepCount);
     LSM6DSO32StatusTypeDef Step_Counter_Reset();
-    
+
     LSM6DSO32StatusTypeDef Enable_Tilt_Detection(LSM6DSO32_SensorIntPin_t IntPin);
     LSM6DSO32StatusTypeDef Disable_Tilt_Detection();
-    
+
     LSM6DSO32StatusTypeDef Enable_Wake_Up_Detection(LSM6DSO32_SensorIntPin_t IntPin);
     LSM6DSO32StatusTypeDef Disable_Wake_Up_Detection();
     LSM6DSO32StatusTypeDef Set_Wake_Up_Threshold(uint8_t Threshold);
     LSM6DSO32StatusTypeDef Get_Wake_Up_Threshold(uint8_t *Threshold);
     LSM6DSO32StatusTypeDef Set_Wake_Up_Duration(uint8_t Duration);
     LSM6DSO32StatusTypeDef Get_Wake_Up_Duration(uint8_t *Duration);
-    
+
     LSM6DSO32StatusTypeDef Enable_Single_Tap_Detection(LSM6DSO32_SensorIntPin_t IntPin);
     LSM6DSO32StatusTypeDef Disable_Single_Tap_Detection();
     LSM6DSO32StatusTypeDef Enable_Double_Tap_Detection(LSM6DSO32_SensorIntPin_t IntPin);
@@ -154,7 +148,7 @@ class LSM6DSO32Sensor
     LSM6DSO32StatusTypeDef Set_Tap_Shock_Time(uint8_t Time);
     LSM6DSO32StatusTypeDef Set_Tap_Quiet_Time(uint8_t Time);
     LSM6DSO32StatusTypeDef Set_Tap_Duration_Time(uint8_t Time);
-    
+
     LSM6DSO32StatusTypeDef Enable_6D_Orientation(LSM6DSO32_SensorIntPin_t IntPin);
     LSM6DSO32StatusTypeDef Disable_6D_Orientation();
     LSM6DSO32StatusTypeDef Set_6D_Orientation_Threshold(uint8_t Threshold);
@@ -164,14 +158,14 @@ class LSM6DSO32Sensor
     LSM6DSO32StatusTypeDef Get_6D_Orientation_YH(uint8_t *YHigh);
     LSM6DSO32StatusTypeDef Get_6D_Orientation_ZL(uint8_t *ZLow);
     LSM6DSO32StatusTypeDef Get_6D_Orientation_ZH(uint8_t *ZHigh);
-    
+
     LSM6DSO32StatusTypeDef Get_X_DRDY_Status(uint8_t *Status);
     LSM6DSO32StatusTypeDef Get_X_Event_Status(LSM6DSO32_Event_Status_t *Status);
     LSM6DSO32StatusTypeDef Set_X_SelfTest(uint8_t Status);
-    
+
     LSM6DSO32StatusTypeDef Get_G_DRDY_Status(uint8_t *Status);
     LSM6DSO32StatusTypeDef Set_G_SelfTest(uint8_t Status);
-    
+
     LSM6DSO32StatusTypeDef Get_FIFO_Num_Samples(uint16_t *NumSamples);
     LSM6DSO32StatusTypeDef Get_FIFO_Full_Status(uint8_t *Status);
     LSM6DSO32StatusTypeDef Set_FIFO_INT1_FIFO_Full(uint8_t Status);
@@ -184,7 +178,7 @@ class LSM6DSO32Sensor
     LSM6DSO32StatusTypeDef Set_FIFO_X_BDR(float Bdr);
     LSM6DSO32StatusTypeDef Get_FIFO_G_Axes(int32_t *AngularVelocity);
     LSM6DSO32StatusTypeDef Set_FIFO_G_BDR(float Bdr);
-    
+
     /**
      * @brief Utility function to read data.
      * @param  pBuffer: pointer to data to be read.
@@ -192,8 +186,8 @@ class LSM6DSO32Sensor
      * @param  NumByteToRead: number of bytes to be read.
      * @retval 0 if ok, an error code otherwise.
      */
-    uint8_t IO_Read(uint8_t* pBuffer, uint8_t RegisterAddr, uint16_t NumByteToRead)
-    {        
+    uint8_t IO_Read(uint8_t *pBuffer, uint8_t RegisterAddr, uint16_t NumByteToRead)
+    {
       if (dev_spi) {
         dev_spi->beginTransaction(SPISettings(spi_speed, MSBFIRST, SPI_MODE3));
 
@@ -202,17 +196,17 @@ class LSM6DSO32Sensor
         /* Write Reg Address */
         dev_spi->transfer(RegisterAddr | 0x80);
         /* Read the data */
-        for (uint16_t i=0; i<NumByteToRead; i++) {
-          *(pBuffer+i) = dev_spi->transfer(0x00);
+        for (uint16_t i = 0; i < NumByteToRead; i++) {
+          *(pBuffer + i) = dev_spi->transfer(0x00);
         }
-         
+
         digitalWrite(cs_pin, HIGH);
 
         dev_spi->endTransaction();
 
         return 0;
       }
-		
+
       if (dev_i2c) {
         dev_i2c->beginTransmission(((uint8_t)(((address) >> 1) & 0x7F)));
         dev_i2c->write(RegisterAddr);
@@ -220,7 +214,7 @@ class LSM6DSO32Sensor
 
         dev_i2c->requestFrom(((uint8_t)(((address) >> 1) & 0x7F)), (uint8_t) NumByteToRead);
 
-        int i=0;
+        int i = 0;
         while (dev_i2c->available()) {
           pBuffer[i] = dev_i2c->read();
           i++;
@@ -231,7 +225,7 @@ class LSM6DSO32Sensor
 
       return 1;
     }
-    
+
     /**
      * @brief Utility function to write data.
      * @param  pBuffer: pointer to data to be written.
@@ -239,8 +233,8 @@ class LSM6DSO32Sensor
      * @param  NumByteToWrite: number of bytes to write.
      * @retval 0 if ok, an error code otherwise.
      */
-    uint8_t IO_Write(uint8_t* pBuffer, uint8_t RegisterAddr, uint16_t NumByteToWrite)
-    {  
+    uint8_t IO_Write(uint8_t *pBuffer, uint8_t RegisterAddr, uint16_t NumByteToWrite)
+    {
       if (dev_spi) {
         dev_spi->beginTransaction(SPISettings(spi_speed, MSBFIRST, SPI_MODE3));
 
@@ -249,7 +243,7 @@ class LSM6DSO32Sensor
         /* Write Reg Address */
         dev_spi->transfer(RegisterAddr);
         /* Write the data */
-        for (uint16_t i=0; i<NumByteToWrite; i++) {
+        for (uint16_t i = 0; i < NumByteToWrite; i++) {
           dev_spi->transfer(pBuffer[i]);
         }
 
@@ -257,9 +251,9 @@ class LSM6DSO32Sensor
 
         dev_spi->endTransaction();
 
-        return 0;                    
+        return 0;
       }
-  
+
       if (dev_i2c) {
         dev_i2c->beginTransmission(((uint8_t)(((address) >> 1) & 0x7F)));
 
@@ -277,41 +271,41 @@ class LSM6DSO32Sensor
     }
 
   private:
-  
+
     LSM6DSO32StatusTypeDef Set_X_ODR_When_Enabled(float Odr, LSM6DSO32_ACC_Operating_Mode_t Mode);
     LSM6DSO32StatusTypeDef Set_X_ODR_When_Disabled(float Odr, LSM6DSO32_ACC_Operating_Mode_t Mode);
     LSM6DSO32StatusTypeDef Set_G_ODR_When_Enabled(float Odr, LSM6DSO32_GYRO_Operating_Mode_t Mode);
     LSM6DSO32StatusTypeDef Set_G_ODR_When_Disabled(float Odr, LSM6DSO32_GYRO_Operating_Mode_t Mode);
-  
-  
+
+
 
     /* Helper classes. */
     TwoWire *dev_i2c;
     SPIClass *dev_spi;
-    
+
     /* Configuration */
     uint8_t address;
     int cs_pin;
     uint32_t spi_speed;
-    
+
     lsm6dso32_odr_xl_t acc_odr;
     lsm6dso32_odr_g_t gyro_odr;
-    
+
     uint8_t acc_is_enabled;
     uint8_t gyro_is_enabled;
-    
-    
-    stmdev_ctx_t reg_ctx;
-    
+
+
+    lsm6dso32_ctx_t reg_ctx;
+
 };
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-int32_t LSM6DSO32_io_write( void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite );
-int32_t LSM6DSO32_io_read( void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead );
+int32_t LSM6DSO32_io_write(void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint16_t nBytesToWrite);
+int32_t LSM6DSO32_io_read(void *handle, uint8_t ReadAddr, uint8_t *pBuffer, uint16_t nBytesToRead);
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif

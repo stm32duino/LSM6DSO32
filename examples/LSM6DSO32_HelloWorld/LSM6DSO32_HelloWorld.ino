@@ -16,35 +16,37 @@
 #include <LSM6DSO32Sensor.h>
 
 #ifdef ARDUINO_SAM_DUE
-#define DEV_I2C Wire1
+  #define DEV_I2C Wire1
 #elif defined(ARDUINO_ARCH_STM32)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #elif defined(ARDUINO_ARCH_AVR)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #else
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #endif
 #define SerialPort Serial
 
 // Components
 LSM6DSO32Sensor AccGyr(&DEV_I2C);
 
-void setup() {
+void setup()
+{
   // Led.
   pinMode(LED_BUILTIN, OUTPUT);
 
   // Initialize serial for output.
   SerialPort.begin(115200);
-  
+
   // Initialize I2C bus.
   DEV_I2C.begin();
-  
+
   AccGyr.begin();
   AccGyr.Enable_X();
   AccGyr.Enable_G();
 }
 
-void loop() {
+void loop()
+{
   // Led blinking.
   digitalWrite(LED_BUILTIN, HIGH);
   delay(250);

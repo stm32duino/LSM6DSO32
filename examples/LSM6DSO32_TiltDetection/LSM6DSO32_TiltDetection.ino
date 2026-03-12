@@ -14,13 +14,13 @@
 #include <LSM6DSO32Sensor.h>
 
 #ifdef ARDUINO_SAM_DUE
-#define DEV_I2C Wire1
+  #define DEV_I2C Wire1
 #elif defined(ARDUINO_ARCH_STM32)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #elif defined(ARDUINO_ARCH_AVR)
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #else
-#define DEV_I2C Wire
+  #define DEV_I2C Wire
 #endif
 #define SerialPort Serial
 
@@ -31,7 +31,8 @@ LSM6DSO32Sensor accGyr(&DEV_I2C);
 //Interrupts.
 volatile int mems_event = 0;
 
-void setup() {
+void setup()
+{
   // Led.
   pinMode(LED_BUILTIN, OUTPUT);
   // Initialize serial for output.
@@ -39,7 +40,7 @@ void setup() {
 
   // Initialize I2C bus.
   DEV_I2C.begin();
-  
+
   //Int1 pin input
   pinMode(IMU_INT_1, INPUT);
 
@@ -48,26 +49,24 @@ void setup() {
   accGyr.Enable_Tilt_Detection(LSM6DSO32_INT1_PIN);
 }
 
-void loop() {
+void loop()
+{
 
   int int_val = digitalRead(IMU_INT_1);
-  if(int_val && !mems_event)
-  {
+  if (int_val && !mems_event) {
     mems_event = 1;
   }
 
-  if (mems_event)
-  {
-    mems_event=0;
+  if (mems_event) {
+    mems_event = 0;
     LSM6DSO32_Event_Status_t status;
     accGyr.Get_X_Event_Status(&status);
-    if (status.TiltStatus)
-    {
+    if (status.TiltStatus) {
       // Led blinking.
       digitalWrite(LED_BUILTIN, HIGH);
       delay(100);
       digitalWrite(LED_BUILTIN, LOW);
-      
+
       // Output data.
       SerialPort.println("Tilt Detected!");
     }
