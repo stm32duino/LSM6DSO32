@@ -262,7 +262,7 @@ LSM6DSO32StatusTypeDef LSM6DSO32Sensor::Get_X_ODR(float *Odr)
 /**
  * @brief  Get the LSM6DSO32 accelerometer sensor output data rate and mode
  * @param  Odr pointer where the output data rate is written
- * @param  Mode pointer where the ouput operating mode is written
+ * @param  Mode pointer where the output operating mode is written
  * @retval 0 in case of success, an error code otherwise
  */
 LSM6DSO32StatusTypeDef LSM6DSO32Sensor::Get_X_ODR_With_Mode(float *Odr, LSM6DSO32_ACC_Operating_Mode_t *Mode)
